@@ -5,11 +5,6 @@ var socket = io();
 // client listening for connect to server
 socket.on('connect', function() {
   console.log('We connected!');
-
-  socket.emit('createMessage', {
-    from: 'timmycron',
-    text: 'WOOOOOAH'
-  });
 });
 
 // client listening for disconnect from server
