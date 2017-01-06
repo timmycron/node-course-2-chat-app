@@ -14,21 +14,21 @@ socket.on('disconnect', function() {
 
 // custom event
 socket.on('newMessage', function(message) {
-  console.log('newMessage', message);
-
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   var li = $('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   $('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function(message) {
+  var formattedTime = moment(message.createdAt).format('h:mm a');
   var li = $('<li></li>');
   var a = $('<a target="_blank">My current location</a>');
 
   // using functions like text and attr
   // rather than just injecting with template string... if you did that people
   // could inject malicious code
-  li.text(`${message.from}: `);
+  li.text(`${message.from} ${formattedTime}: `);
   a.attr('href', message.url);
   li.append(a);
   $('#messages').append(li);
@@ -65,7 +65,7 @@ locationButton.on('click', function() {
       longitude: position.coords.longitude
     });
   }, function () {
-    locationButton.removeAttr('disabled').text('Send location');;
+    locationButton.removeAttr('disabled').text('Send location');
     alert('Unable to fetch location.');
   });
 });
