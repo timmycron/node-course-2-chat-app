@@ -1,6 +1,23 @@
 // creates our connection
 var socket = io();
 
+function scrollToBottom() {
+  // Selectors
+  var messages = $("#messages");
+  var newMessage = messages.children('li:last-child');
+
+  // Heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
+
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+}
+
 // use functions instead of arrow functions on client side
 // client listening for connect to server
 socket.on('connect', function() {
@@ -23,6 +40,7 @@ socket.on('newMessage', function(message) {
   });
 
   $('#messages').append(html);
+  scrollToBottom();
 });
 
 socket.on('newLocationMessage', function(message) {
@@ -36,6 +54,7 @@ socket.on('newLocationMessage', function(message) {
   });
 
   $('#messages').append(html);
+  scrollToBottom();
 
   // var formattedTime = moment(message.createdAt).format('h:mm a');
   // var li = $('<li></li>');
