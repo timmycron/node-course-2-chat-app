@@ -21,12 +21,31 @@ function scrollToBottom() {
 // use functions instead of arrow functions on client side
 // client listening for connect to server
 socket.on('connect', function() {
-  console.log('We connected!');
+  var params = $.deparam(window.location.search);
+
+  socket.emit('join', params, function(err) {
+    if (err) {
+      alert(err);
+      window.location.href='/';
+    } else {
+      console.log('No error');
+    }
+  });
 });
 
 // client listening for disconnect from server
 socket.on('disconnect', function() {
   console.log('Disconnected from server');
+});
+
+socket.on('updateUserList', function(users) {
+  var ol = $('<ol></ol>');
+
+  users.forEach(function(user) {
+    ol.append($('<li></li>').text(user));
+  });
+
+  $('#users').html(ol);
 });
 
 // custom event
